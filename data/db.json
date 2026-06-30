@@ -1,0 +1,138 @@
+{
+  "messages": [
+    {
+      "id": "msg_1",
+      "name": "Rajesh Kumar",
+      "phone": "+91 98765 01234",
+      "email": "rajesh@example.com",
+      "subject": "Class Enquiry",
+      "message": "Hi, I would like to enroll my 8-year-old daughter in the Kids Art Program. Could you please share the weekend class timings and fee details?",
+      "date": "2026-06-25T10:15:30.000Z"
+    },
+    {
+      "id": "msg_2",
+      "name": "Kavitha Sharma",
+      "phone": "+91 99887 76655",
+      "email": "kavitha.s@example.com",
+      "subject": "Donation / Sponsorship",
+      "message": "Hello, our corporate team is interested in sponsoring an art workshop for specially-abled children next month. Please connect us with the organizing lead.",
+      "date": "2026-06-27T14:45:00.000Z"
+    }
+  ],
+  "registrations": [
+    {
+      "id": "reg_1",
+      "name": "Amit Patel",
+      "email": "amit.patel@example.com",
+      "phone": "+91 98989 89898",
+      "ageGroup": "Intermediate",
+      "program": "Painting Workshops",
+      "date": "2026-06-26T11:20:00.000Z"
+    },
+    {
+      "id": "reg_2",
+      "name": "Deepa Nair",
+      "email": "deepa.nair@example.com",
+      "phone": "+91 97766 55443",
+      "ageGroup": "Kids 5-12",
+      "program": "Kids Art Program",
+      "date": "2026-06-28T09:30:00.000Z"
+    }
+  ],
+  "donations": [
+    {
+      "id": "don_1782725735880",
+      "name": "Anonymous Donor",
+      "email": "",
+      "phone": "",
+      "amount": 5000,
+      "project": "Support Inclusive Programs",
+      "message": "",
+      "showOnWall": true,
+      "date": "2026-06-29T09:35:35.880Z"
+    },
+    {
+      "id": "don_1",
+      "name": "Srinivas Rao",
+      "email": "srinivas@example.com",
+      "phone": "+91 91234 56789",
+      "amount": 5000,
+      "project": "Sponsor an Artist",
+      "message": "Happy to support such a wonderful cause. Keep up the good work!",
+      "showOnWall": true,
+      "date": "2026-06-24T08:10:00.000Z"
+    },
+    {
+      "id": "don_2",
+      "name": "Anonymous Donor",
+      "email": "anon@example.com",
+      "phone": "",
+      "amount": 2000,
+      "project": "Donate Materials",
+      "message": "Supporting art supplies for the children.",
+      "showOnWall": false,
+      "date": "2026-06-26T16:40:00.000Z"
+    },
+    {
+      "id": "don_3",
+      "name": "Dr. Sunita Sen",
+      "email": "sunita.sen@example.com",
+      "phone": "+91 93456 78901",
+      "amount": 10000,
+      "project": "Support Inclusive Programs",
+      "message": "Art is a powerful therapist. Happy to fund the inclusive art training sessions.",
+      "showOnWall": true,
+      "date": "2026-06-28T18:25:00.000Z"
+    }
+  ],
+  "orders": [
+    {
+      "id": "ord_1",
+      "name": "Vijay Varma",
+      "email": "vijay.v@example.com",
+      "phone": "+91 98123 45678",
+      "address": "Flat 302, Sai Enclave, Jubilee Hills, Hyderabad, Telangana - 500033",
+      "items": [
+        {
+          "id": "ss1",
+          "name": "Sunset Serenity",
+          "price": 4500,
+          "quantity": 1
+        }
+      ],
+      "total": 4500,
+      "paymentMethod": "Bank Transfer",
+      "status": "Shipped",
+      "date": "2026-06-25T12:00:00.000Z"
+    },
+    {
+      "id": "ord_2",
+      "name": "Meera Joshi",
+      "email": "meera.j@example.com",
+      "phone": "+91 94400 11223",
+      "address": "Plot 15, VGP Layout, Gachibowli, Hyderabad, Telangana - 500032",
+      "items": [
+        {
+          "id": "pb1",
+          "name": "Pebble Birds Wall Art",
+          "price": 2200,
+          "quantity": 2
+        }
+      ],
+      "total": 4400,
+      "paymentMethod": "QR Scan",
+      "status": "Pending",
+      "date": "2026-06-28T15:30:00.000Z"
+    }
+  ],
+  "newsletter": [
+    {
+      "email": "sub1@example.com",
+      "date": "2026-06-25T10:00:00.000Z"
+    },
+    {
+      "email": "sub2@example.com",
+      "date": "2026-06-27T11:12:00.000Z"
+    }
+  ]
+}

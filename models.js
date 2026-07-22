@@ -122,10 +122,33 @@ const NewsletterSchema = new mongoose.Schema({
 
 const MemberSchema = new mongoose.Schema({
   name: { type: String, required: true },
-  role: { type: String, required: true },
-  info: { type: String, required: true },
+  email: { type: String, required: true },
+  role: { type: String, default: 'Member' },
+  isApproved: { type: Boolean, default: false },
+  isFounder: { type: Boolean, default: false },
+  info: { type: String, default: '' },
   highlights: [{ type: String }],
-  image: { type: String }
+  image: { type: String, default: '' },
+  udidNumber: { type: String },
+  disabilityType: { type: String },
+  udidFrontImage: { type: String },
+  udidBackImage: { type: String },
+  volunteerWork: { type: String },
+  volunteerAvailability: { type: String },
+  sponsorOrg: { type: String },
+  sponsorCategory: { type: String },
+  companyName: { type: String },
+  gstNumber: { type: String },
+  industryCategory: { type: String },
+  artworks: [{
+    id: { type: String },
+    title: { type: String },
+    description: { type: String },
+    category: { type: String },
+    price: { type: Number },
+    image: { type: String },
+    date: { type: String }
+  }]
 }, { timestamps: true });
 
 const AboutConfigSchema = new mongoose.Schema({

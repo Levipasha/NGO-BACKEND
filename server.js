@@ -20,11 +20,22 @@ const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/master
 
 // Middleware
 app.use(cors());
-app.use(bodyParser.json());
+app.use(bodyParser.json({ limit: '50mb' }));
+app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
 
 // Database Connection
 mongoose.connect(MONGODB_URI)
-  .then(() => console.log('Connected to MongoDB database successfully.'))
+  .then(async () => {
+    console.log('Connected to MongoDB database successfully.');
+    try {
+      await Member.updateMany(
+        { $or: [{ email: { $exists: false } }, { role: /Founder/i }, { role: /Instructor/i }, { role: /Counselor/i }, { role: /Mentor/i }] }, 
+        { $set: { isApproved: true } }
+      );
+    } catch (e) {
+      console.error('Member auto-approval migration notice:', e);
+    }
+  })
   .catch(err => console.error('MongoDB database connection error:', err));
 
 // Cloudinary Configuration
@@ -480,6 +491,107 @@ app.put('/api/admin/about', authenticateAdmin, async (req, res) => {
   try {
     const item = await AboutConfig.findOneAndUpdate({}, req.body, { new: true, upsert: true });
     res.json({ success: true, data: item });
+  } catch (err) {
+    res.status(500).json({ success: false, message: err.message });
+  }
+});
+
+// Member Registration & Self Services
+app.post('/api/members/register', async (req, res) => {
+  try {
+    const { name, email } = req.body;
+    if (!name || !email) {
+      return res.status(400).json({ success: false, message: 'Name and email are required.' });
+    }
+
+    let member = await Member.findOne({ email });
+    if (member) {
+      Object.assign(member, req.body);
+      member.isApproved = false;
+      await member.save();
+      console.log('Updated registration for member:', email);
+      return res.json({ success: true, message: 'Member registration updated! Submitted for Admin approval.', data: member });
+    }
+
+    member = await Member.create({
+      ...req.body,
+      isApproved: false,
+      isFounder: false
+    });
+    console.log('Created new registration for member:', email);
+    res.json({ success: true, message: 'Registration submitted! Awaiting Admin approval.', data: member });
+  } catch (err) {
+    console.error('Registration API error:', err);
+    res.status(500).json({ success: false, message: err.message });
+  }
+});
+
+app.post('/api/members/login-check', async (req, res) => {
+  try {
+    const { email } = req.body;
+    const member = await Member.findOne({ email });
+    if (!member) {
+      return res.json({ success: true, isApproved: false, member: null });
+    }
+    res.json({ 
+      success: true, 
+      isApproved: !!member.isApproved, 
+      member: member 
+    });
+  } catch (err) {
+    res.status(500).json({ success: false, message: err.message });
+  }
+});
+
+app.put('/api/admin/members/:id/approve', authenticateAdmin, async (req, res) => {
+  try {
+    const member = await Member.findByIdAndUpdate(req.params.id, { isApproved: true }, { new: true });
+    if (!member) return res.status(404).json({ success: false, message: 'Member not found' });
+    res.json({ success: true, message: 'Member approved successfully', data: member });
+  } catch (err) {
+    res.status(500).json({ success: false, message: err.message });
+  }
+});
+
+app.post('/api/members/profile/update', async (req, res) => {
+  try {
+    const { email, name, info, image, highlights } = req.body;
+    const member = await Member.findOneAndUpdate({ email }, { name, info, image, highlights }, { new: true });
+    res.json({ success: true, message: 'Profile updated successfully', data: member });
+  } catch (err) {
+    res.status(500).json({ success: false, message: err.message });
+  }
+});
+
+app.post('/api/members/artworks/add', async (req, res) => {
+  try {
+    const { email, title, description, category, price, image } = req.body;
+    const member = await Member.findOne({ email });
+    if (!member) return res.status(404).json({ success: false, message: 'Member profile not found' });
+
+    const newArt = {
+      id: 'art_' + Date.now(),
+      title,
+      description,
+      category: category || 'Paintings',
+      price: Number(price) || 0,
+      image,
+      date: new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })
+    };
+
+    member.artworks.push(newArt);
+    await member.save();
+
+    // Also add as Product in Shop catalog so it can be purchased!
+    await Product.create({
+      name: title,
+      category: category || 'Paintings',
+      price: Number(price) || 0,
+      description: `Original Artwork by ${member.name}. ${description}`,
+      image
+    });
+
+    res.json({ success: true, message: 'Artwork posted to your portfolio and shop successfully!', data: member });
   } catch (err) {
     res.status(500).json({ success: false, message: err.message });
   }

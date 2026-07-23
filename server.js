@@ -11,7 +11,7 @@ const multer = require('multer');
 const { 
   Program, GalleryItem, Event, Product, BlogPost, 
   ContactConfig, HomeConfig, Message, Registration, 
-  Donation, Order, Newsletter, Member, AboutConfig 
+  Donation, Order, Newsletter, Member, AboutConfig, Story
 } = require('./models');
 
 const app = express();
@@ -169,6 +169,16 @@ app.get('/api/home', async (req, res) => {
   }
 });
 
+// Get Stories list
+app.get('/api/stories', async (req, res) => {
+  try {
+    const list = await Story.find({});
+    res.json({ success: true, data: list });
+  } catch (err) {
+    res.status(500).json({ success: false, message: err.message });
+  }
+});
+
 // ==========================================
 // USER INTERACTIONS / PUBLIC FORM POSTS
 // ==========================================
@@ -235,13 +245,13 @@ app.get('/api/donations/wall', async (req, res) => {
 
 // Shop orders placement
 app.post('/api/orders', async (req, res) => {
-  const { name, email, phone, address, items, total, paymentMethod } = req.body;
+  const { name, email, phone, address, items, total } = req.body;
   if (!name || !email || !phone || !address || !items || items.length === 0 || !total) {
     return res.status(400).json({ success: false, message: 'Invalid order details. Please complete checkout.' });
   }
   try {
     const order = await Order.create({
-      name, email, phone, address, items, total: parseFloat(total), paymentMethod
+      name, email, phone, address, items, total: parseFloat(total), status: 'Pending Confirmation'
     });
     res.json({ success: true, message: 'Order placed successfully!', orderId: order._id });
   } catch (err) {
@@ -622,6 +632,36 @@ app.delete('/api/admin/members/:id', authenticateAdmin, async (req, res) => {
     const item = await Member.findByIdAndDelete(req.params.id);
     if (!item) return res.status(404).json({ success: false, message: 'Member not found' });
     res.json({ success: true, message: 'Member deleted successfully' });
+  } catch (err) {
+    res.status(500).json({ success: false, message: err.message });
+  }
+});
+
+// Stories CRUD
+app.post('/api/admin/stories', authenticateAdmin, async (req, res) => {
+  try {
+    const item = await Story.create(req.body);
+    res.json({ success: true, data: item });
+  } catch (err) {
+    res.status(500).json({ success: false, message: err.message });
+  }
+});
+
+app.put('/api/admin/stories/:id', authenticateAdmin, async (req, res) => {
+  try {
+    const item = await Story.findByIdAndUpdate(req.params.id, req.body, { new: true });
+    if (!item) return res.status(404).json({ success: false, message: 'Story not found' });
+    res.json({ success: true, data: item });
+  } catch (err) {
+    res.status(500).json({ success: false, message: err.message });
+  }
+});
+
+app.delete('/api/admin/stories/:id', authenticateAdmin, async (req, res) => {
+  try {
+    const item = await Story.findByIdAndDelete(req.params.id);
+    if (!item) return res.status(404).json({ success: false, message: 'Story not found' });
+    res.json({ success: true, message: 'Story deleted successfully' });
   } catch (err) {
     res.status(500).json({ success: false, message: err.message });
   }

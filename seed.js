@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const { 
   Program, GalleryItem, Event, Product, BlogPost, 
   ContactConfig, HomeConfig, Message, Registration, 
-  Donation, Order, Newsletter, Member, AboutConfig 
+  Donation, Order, Newsletter, Member, AboutConfig, Story
 } = require('./models');
 
 const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/masterbrush';
@@ -18,6 +18,7 @@ const seedData = async () => {
     await Member.insertMany([
       {
         name: 'Vishnu Kondoj',
+        email: 'vishnu@masterbrush.org',
         role: 'Founder & Lead Fine Arts Instructor',
         info: 'Vishnu is a seasoned visual artist with a passion for inclusive art training. He founded MasterBrush to empower students and create a space where everyone has a right to express their creative potential.',
         highlights: ['10+ Years Experience', 'Acrylic Specialist', 'Community Art Advisor'],
@@ -25,6 +26,7 @@ const seedData = async () => {
       },
       {
         name: 'Archana Patel',
+        email: 'archana@masterbrush.org',
         role: 'Art Therapist & Senior Counselor',
         info: 'Archana specializes in creative expression as a healing medium. She facilitates our Art Therapy sessions, helping children, senior citizens, and differently-abled individuals manage stress and gain confidence.',
         highlights: ['Licensed Art Therapist', 'Mental Well-being Advocate', 'Inclusive Workshops Designer'],
@@ -32,6 +34,7 @@ const seedData = async () => {
       },
       {
         name: 'Rohan Sharma',
+        email: 'rohan@masterbrush.org',
         role: 'Traditional Crafts & Pebble Art Mentor',
         info: 'Rohan teaches traditional Indian art styles and creative handicrafts, including our popular Pebble Art classes. He guides students in turning everyday items into stunning gallery-ready creations.',
         highlights: ['Craft Master', 'Pebble Art Specialist', 'Eco-friendly Materials expert'],
@@ -180,10 +183,10 @@ const seedData = async () => {
     // 6. Contact Config
     await ContactConfig.deleteMany({});
     await ContactConfig.create({
-      address: 'Plot No. 42, Art Colony, Jubilee Hills, Hyderabad - 500033',
+      address: 'Plot No. 13, Sri Sai Avenue Apartment, R.K.H Colony, AS Rao Nagar, Hyderabad - 500062',
       phone: '+91 98765 43210',
       email: 'info@masterbrush.org',
-      mapUrl: 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3807.1352467292275!2d78.40428831528659!3d17.405333988075326!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bcb972e391b114d%3A0xc3cf9c98e2195dfb!2sJubilee%20Hills%2C%20Hyderabad%2C%20Telangana!5e0!3m2!1sen!2sin!4v1655000000000!5m2!1sen!2sin'
+      mapUrl: 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3805.8947834632!2d78.55870151528!3d17.47615498806!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bcb9c0e2d2bffff%3A0x1234abcd5678ef90!2sAS%20Rao%20Nagar%2C%20Hyderabad%2C%20Telangana%20500062!5e0!3m2!1sen!2sin!4v1700000000000!5m2!1sen!2sin'
     });
     console.log("Seeded Contact Config");
 
@@ -274,8 +277,7 @@ const seedData = async () => {
         address: "Flat 402, Sea Green Apartments, Bandra, Mumbai - 400050",
         items: [{ name: "Sunset Serenity", quantity: 1, price: 4500 }],
         total: 4500,
-        paymentMethod: "Cash on Delivery",
-        status: "Pending",
+        status: "Pending Confirmation",
         date: new Date(Date.now() - 3600000 * 5)
       },
       {
@@ -285,7 +287,6 @@ const seedData = async () => {
         address: "12, Rose Wood Villa, Juhu, Mumbai - 400049",
         items: [{ name: "Peacock Pride", quantity: 1, price: 6000 }],
         total: 6000,
-        paymentMethod: "Card / Online",
         status: "Shipped",
         date: new Date(Date.now() - 3600000 * 18)
       }
@@ -304,6 +305,30 @@ const seedData = async () => {
       }
     ]);
     console.log("Seeded Newsletter subscriptions");
+
+    // 14. Stories of Transformation
+    await Story.deleteMany({});
+    await Story.insertMany([
+      {
+        text: "MasterBrush gave me the confidence to believe in my talent. It's more than an art class, it's a family.",
+        authorName: "Ananya",
+        authorRole: "Student",
+        avatarInitials: "AN"
+      },
+      {
+        text: "My son has specially-abled needs and the team made him feel so included and celebrated. His artwork is now in the gallery!",
+        authorName: "Priya Reddy",
+        authorRole: "Parent",
+        avatarInitials: "PR"
+      },
+      {
+        text: "Art therapy sessions at MasterBrush helped me heal. I found a new way to express emotions I couldn't put into words.",
+        authorName: "Rajan Kumar",
+        authorRole: "Art Therapy Participant",
+        avatarInitials: "RK"
+      }
+    ]);
+    console.log("Seeded Transformation Stories");
 
     console.log("Database seeded successfully!");
     process.exit(0);

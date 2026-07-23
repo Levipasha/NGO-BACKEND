@@ -110,8 +110,7 @@ const OrderSchema = new mongoose.Schema({
   address: { type: String, required: true },
   items: { type: Array, required: true },
   total: { type: Number, required: true },
-  paymentMethod: { type: String, default: 'Cash on Delivery' },
-  status: { type: String, default: 'Pending' },
+  status: { type: String, default: 'Pending Confirmation' },
   date: { type: Date, default: Date.now }
 });
 
@@ -166,6 +165,14 @@ const AboutConfigSchema = new mongoose.Schema({
   statLives: { type: String, default: '1000+' }
 }, { timestamps: true });
 
+// Stories of Transformation Schema
+const StorySchema = new mongoose.Schema({
+  text: { type: String, required: true },
+  authorName: { type: String, required: true },
+  authorRole: { type: String, required: true },
+  avatarInitials: { type: String, default: '' }
+}, { timestamps: true });
+
 module.exports = {
   Program: mongoose.model('Program', ProgramSchema),
   Member: mongoose.model('Member', MemberSchema),
@@ -180,5 +187,6 @@ module.exports = {
   Registration: mongoose.model('Registration', RegistrationSchema),
   Donation: mongoose.model('Donation', DonationSchema),
   Order: mongoose.model('Order', OrderSchema),
-  Newsletter: mongoose.model('Newsletter', NewsletterSchema)
+  Newsletter: mongoose.model('Newsletter', NewsletterSchema),
+  Story: mongoose.model('Story', StorySchema)
 };
